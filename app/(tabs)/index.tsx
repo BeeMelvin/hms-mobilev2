@@ -1,77 +1,73 @@
-import { StyleSheet, View, Text, ScrollView } from "react-native";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
+import React from "react";
+
+const buttons = [
+  { title: "Announcements", image: { uri: "https://via.placeholder.com/50" } },
+  { title: "Assignments", image: { uri: "https://via.placeholder.com/50" } },
+  { title: "Submissions", image: { uri: "https://via.placeholder.com/50" } },
+  { title: "Gradebook", image: { uri: "https://via.placeholder.com/50" } },
+  { title: "Settings", image: { uri: "https://via.placeholder.com/50" } },
+  { title: "Help", image: { uri: "https://via.placeholder.com/50" } },
+  { title: "Contact Us", image: { uri: "https://via.placeholder.com/50" } },
+  { title: "Log Out", image: { uri: "https://via.placeholder.com/50" } },
+];
 
 export default function HomeScreen() {
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    const api = axios.create({
-      baseURL: "http://196.252.236.180:8000/api", // Replace with your local IP
-    });
-    api
-      .get("list/assign/")
-      .then((response) => {
-        setData(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
-
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.headerText}>Assignments</Text>
-      {data.length > 0 ? (
-        data.map((item) => (
-          <View key={item.id} style={styles.card}>
-            <Text style={styles.title}>{item.title}</Text>
-            <Text style={styles.description}>{item.description}</Text>
-          </View>
-        ))
-      ) : (
-        <Text style={styles.noDataText}>No assignments available</Text>
-      )}
-    </ScrollView>
+    <View style={styles.container}>
+      <Text style={styles.headerText}>Welcome to the HMS App!</Text>
+      <View style={styles.buttonContainer}>
+        {buttons.map((button, index) => (
+          <TouchableOpacity key={index} style={styles.button}>
+            <Image source={button.image} style={styles.image} />
+            <Text style={styles.buttonText}>{button.title}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 16,
-    backgroundColor: "#f5f5f5", // Light background
+    backgroundColor: "#f5f5f5",
   },
   headerText: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 16,
-    color: "#333", // Darker text for contrast
+    color: "#333",
+    marginBottom: 20,
   },
-  card: {
-    backgroundColor: "#fff", // White card
+  buttonContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  button: {
+    backgroundColor: "#fff",
     borderRadius: 8,
     padding: 16,
-    marginBottom: 12,
+    margin: 8,
+    alignItems: 'center',
+    flexBasis: '45%', // Two buttons per row
     shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 2, // For Android shadow
+    elevation: 2,
   },
-  title: {
-    fontSize: 18,
-    fontWeight: "600",
+  image: {
+    width: 50,
+    height: 50,
     marginBottom: 8,
+  },
+  buttonText: {
+    fontSize: 16,
     color: "#333",
   },
-  description: {
-    fontSize: 14,
-    color: "#666",
-  },
-  noDataText: {
-    fontSize: 16,
-    color: "#999",
-    textAlign: "center",
-    marginTop: 20,
-  },
 });
+
