@@ -1,6 +1,5 @@
-// AssignmentDetailScreen.tsx
 import React, { useState } from 'react';
-import { View, Text, Button, StyleSheet, Alert } from 'react-native';
+import { View, Text, Button, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
@@ -20,6 +19,7 @@ interface AssignmentDetailScreenProps {
 const AssignmentDetailScreen: React.FC<AssignmentDetailScreenProps> = ({ route }) => {
   const { assignment } = route.params; // Get passed assignment data
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   // File picker for video upload
   const pickVideo = async () => {
@@ -29,9 +29,16 @@ const AssignmentDetailScreen: React.FC<AssignmentDetailScreenProps> = ({ route }
         copyToCacheDirectory: true,
       });
 
-      // Check if the result is successful
-      if (result && (result as DocumentPicker.DocumentPickerSuccessResult).type === 'success') {
-        setSelectedFile((result as DocumentPicker.DocumentPickerSuccessResult).uri);
+      // Check if the result contains assets
+      if (result.assets && result.assets.length > 0) {
+        const videoAsset = result.assets[0];
+        // Check MIME type
+        const mimeType = videoAsset.mimeType;
+        if (mimeType && mimeType.startsWith('video/')) {
+          setSelectedFile(videoAsset.uri); // Set the uri from the asset
+        } else {
+          Alert.alert('Invalid file type', 'Please select a valid video file.');
+        }
       } else {
         console.log('Document picker canceled or failed:', result);
       }
@@ -45,12 +52,12 @@ const AssignmentDetailScreen: React.FC<AssignmentDetailScreenProps> = ({ route }
   const recordVideo = async () => {
     try {
       const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
-      if (permissionResult.granted) {
+      if (permissionResult.status === 'granted') { // Check permission status
         const video = await ImagePicker.launchCameraAsync({
           mediaTypes: ImagePicker.MediaTypeOptions.Videos,
         });
-        if (!video.canceled) {
-          setSelectedFile(video.uri);
+        if (!video.cancelled) {
+          setSelectedFile(video.uri ?? null); // Handle potential undefined
         }
       } else {
         Alert.alert('Permission required', 'You need to enable camera permissions to record a video.');
@@ -65,19 +72,17 @@ const AssignmentDetailScreen: React.FC<AssignmentDetailScreenProps> = ({ route }
   const handleSubmit = async () => {
     if (selectedFile) {
       console.log('Submitting video:', selectedFile);
+      setIsLoading(true); // Start loading
       try {
-        // Fetch the video file as a blob
         const response = await fetch(selectedFile);
         const blob = await response.blob();
 
-        // Prepare FormData
         const formData = new FormData();
-        formData.append('video', blob, 'video.mp4'); // The last argument is the filename
+        formData.append('video', blob, 'video.mp4');
 
-        // Upload the video to the server
-        await axios.post('http://196.252.198.87:8000/api/vd/upload', formData, {
+        await axios.post('http://192.168.120.11:8000/api/vd/upload', formData, {
           headers: {
-            'Content-Type': 'multipart/form-data', // Set the content type
+            'Content-Type': 'multipart/form-data',
           },
         });
 
@@ -85,6 +90,8 @@ const AssignmentDetailScreen: React.FC<AssignmentDetailScreenProps> = ({ route }
       } catch (error) {
         console.error('Error uploading video:', error);
         Alert.alert('Error', 'An error occurred while uploading the video.');
+      } finally {
+        setIsLoading(false); // Stop loading
       }
     } else {
       console.log('No file selected');
@@ -99,8 +106,9 @@ const AssignmentDetailScreen: React.FC<AssignmentDetailScreenProps> = ({ route }
 
       <Button title="Pick a video" onPress={pickVideo} />
       <Button title="Record a video" onPress={recordVideo} />
-      <Button title="Submit Video" onPress={handleSubmit} />
+      <Button title="Submit Video" onPress={handleSubmit} disabled={!selectedFile || isLoading} />
 
+      {isLoading && <ActivityIndicator size="large" color="#0000ff" />}
       {selectedFile && <Text style={styles.file}>Selected file: {selectedFile}</Text>}
     </View>
   );
