@@ -5,14 +5,18 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StackNavigationProp } from '@react-navigation/stack';
 import AssignmentsScreen from "../screens/Assignments";
+import AssignmentDetailScreen from "../screens/AssignmentsDetails";
+
+// Defining screen names
+type RootStackParamList = {
+  Home: undefined;
+  Assignments: undefined;
+  AssignmentsDetails: { assignment: any }; // Pass the assignment object
+};
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
-
-type Props = {
-  navigation: HomeScreenNavigationProp;
-};
 
 const buttons = [
   { title: "Announcements", image: { uri: "https://via.placeholder.com/50" } },
@@ -24,22 +28,15 @@ const buttons = [
   { title: "Contact Us", image: { uri: "https://via.placeholder.com/50" } },
   { title: "Log Out", image: { uri: "https://via.placeholder.com/50" } },
 ];
-// Define your screen names
-type RootStackParamList = {
-  Home: undefined;
-  Assignments: undefined;
-  // Add other screens as needed
-};
 
 // Create stack navigator
-
 export default function App() {
   return (
     <NavigationContainer independent={true}>
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Assignments" component={AssignmentsScreen} />
-     
+        <Stack.Screen name="AssignmentsDetails" component={AssignmentDetailScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -49,8 +46,12 @@ function HomeScreen() {
   const navigation = useNavigation<HomeScreenNavigationProp>(); // Get navigation object
 
   const handleNavigation = (screen: keyof RootStackParamList) => {
-    
-    navigation.navigate(screen); // Use the navigation object to navigate
+    // Check if the screen is Assignments to pass necessary params
+    if (screen === 'Assignments') {
+      navigation.navigate(screen);
+    } else {
+      navigation.navigate(screen);
+    }
   };
 
   return (
