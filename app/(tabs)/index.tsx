@@ -6,8 +6,14 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StackNavigationProp } from '@react-navigation/stack';
 import AssignmentsScreen from "../screens/Assignments";
 import AssignmentDetailScreen from "../screens/AssignmentsDetails";
-
-// Defining screen names
+import AnnouncementsScreen from '../screens/AnnouncementsScreen';
+import SubmissionsScreen from '../screens/SubmissionsScreen';
+import GradebookScreen from '../screens/GradebookScreen';
+import SettingsScreen from '../screens/SettingScreen';
+import HelpScreen from '../screens/HelpScreen';
+import ContactUsScreen from '../screens/ContactUsScreen';
+import LogoutScreen from '../screens/LogoutScreen';
+// // Defining screen names
 type RootStackParamList = {
   Home: undefined;
   Assignments: undefined;
@@ -26,7 +32,7 @@ const buttons = [
   { title: "Settings", image: require('./assets/settings.png') },
   { title: "Help", image: require('./assets/help.png') },
   { title: "Contact Us", image: require('./assets/contact.png') },
-  { title: "Log Out", image: require('./assets/logout.png') },
+  { title: "Logout", image: require('./assets/logout.png') },
 ];
 
 // Create stack navigator
@@ -37,6 +43,13 @@ export default function App() {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Assignments" component={AssignmentsScreen} />
         <Stack.Screen name="AssignmentsDetails" component={AssignmentDetailScreen} />
+        <Stack.Screen name="Announcements" component={AnnouncementsScreen} />
+        <Stack.Screen name="Submissions" component={SubmissionsScreen} />
+        <Stack.Screen name="Gradebook" component={GradebookScreen} />
+        <Stack.Screen name="Settings" component={SettingsScreen} />
+        <Stack.Screen name="Help" component={HelpScreen} />
+        <Stack.Screen name="Contact Us" component={ContactUsScreen} />
+        <Stack.Screen name="Logout" component={LogoutScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
