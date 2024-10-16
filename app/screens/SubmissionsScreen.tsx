@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#f0f8ff', 
+    backgroundColor: '#f0f8ff', // Light blue background
   },
   header: {
     fontSize: 28,
@@ -79,7 +79,8 @@ const styles = StyleSheet.create({
     color: '#6200ea',
     marginBottom: 20,
     textAlign: 'center',
-    fontFamily: 'sans-serif', 
+    fontFamily: 'sans-serif', // Universally supported font
+  },
   scrollView: {
     paddingBottom: 20,
   },
@@ -94,7 +95,7 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     shadowOffset: { width: 0, height: 3 },
     borderLeftWidth: 8,
-    borderLeftColor: '#6200ea', 
+    borderLeftColor: '#6200ea', // Accent color
   },
   title: {
     fontSize: 20,

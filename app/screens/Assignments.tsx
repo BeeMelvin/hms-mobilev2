@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     shadowOffset: { width: 0, height: 3 },
     borderLeftWidth: 8,
-    borderLeftColor: '#6
+    borderLeftColor: '#6200ea', 
   },
   title: {
     fontSize: 20,
