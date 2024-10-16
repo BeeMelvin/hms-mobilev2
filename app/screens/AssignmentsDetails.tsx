@@ -23,11 +23,7 @@ const AssignmentDetailScreen: React.FC<AssignmentDetailScreenProps> = ({ route }
   const { assignment } = route.params;
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [thumbnail, setThumbnail] = useState('');
-  const [hlsName, setHlsName] = useState('');
-  const [hlsPath, setHlsPath] = useState('');
-  const [status, setStatus] = useState('');
-  const [isRunning, setIsRunning] = useState('');
+  
 
   const pickVideo = async () => {
     try {
@@ -90,11 +86,7 @@ const AssignmentDetailScreen: React.FC<AssignmentDetailScreenProps> = ({ route }
         name: 'video.mp4',
         type: 'video/mp4',
       });
-      formData.append('thumbnail', thumbnail);
-      formData.append('hls_name', hlsName);
-      formData.append('hls_path', hlsPath);
-      formData.append('status', status);
-      formData.append('is_running', isRunning.trim().toLowerCase() === 'true' ? 'true' : 'false');
+      
 
       const token = await AsyncStorage.getItem('token');
       const csrfToken = await AsyncStorage.getItem('csrf_token');
@@ -133,36 +125,7 @@ const AssignmentDetailScreen: React.FC<AssignmentDetailScreenProps> = ({ route }
       <Text style={styles.dueDate}>Due Date: {assignment.due_date}</Text>
       <Text style={styles.description}>Description: {assignment.description}</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Thumbnail URL"
-        value={thumbnail}
-        onChangeText={setThumbnail}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="HLS Name"
-        value={hlsName}
-        onChangeText={setHlsName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="HLS Path"
-        value={hlsPath}
-        onChangeText={setHlsPath}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Status"
-        value={status}
-        onChangeText={setStatus}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Is Running (true/false)"
-        value={isRunning}
-        onChangeText={setIsRunning}
-      />
+  
 
       <View style={styles.instructionBox}>
         <Text style={styles.instruction}>
@@ -201,11 +164,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
+    
   },
   dueDate: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 8,
+    // marginVertical: 18,
   },
   description: {
     fontWeight: 'bold',
@@ -217,7 +181,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#6a5acd',
     borderRadius: 8,
-    marginVertical: 16,
+    marginVertical: 6,
   },
   instruction: {
     fontSize: 16,
