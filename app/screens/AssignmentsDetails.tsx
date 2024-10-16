@@ -3,6 +3,7 @@ import { View, Text, Button, StyleSheet, Alert, ActivityIndicator, TextInput, To
 import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface AssignmentDetailScreenProps {
   route: {
@@ -10,7 +11,7 @@ interface AssignmentDetailScreenProps {
       assignment: {
         title: string;
         description: string;
-        due_date: string; // Added due_date to the assignment object
+        due_date: string;
         id: number;
       };
     };
@@ -19,18 +20,15 @@ interface AssignmentDetailScreenProps {
 }
 
 const AssignmentDetailScreen: React.FC<AssignmentDetailScreenProps> = ({ route }) => {
-  const { assignment } = route.params; // Get passed assignment data
+  const { assignment } = route.params;
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-
-  // New states for the additional fields
   const [thumbnail, setThumbnail] = useState('');
   const [hlsName, setHlsName] = useState('');
   const [hlsPath, setHlsPath] = useState('');
   const [status, setStatus] = useState('');
   const [isRunning, setIsRunning] = useState('');
 
-  // File picker for video upload
   const pickVideo = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync({
@@ -38,18 +36,15 @@ const AssignmentDetailScreen: React.FC<AssignmentDetailScreenProps> = ({ route }
         copyToCacheDirectory: true,
       });
 
-      // Check if the result contains assets
       if (result.assets && result.assets.length > 0) {
         const videoAsset = result.assets[0];
         const mimeType = videoAsset.mimeType;
 
         if (mimeType && mimeType.startsWith('video/')) {
-          setSelectedFile(videoAsset.uri); // Set the uri from the asset
+          setSelectedFile(videoAsset.uri);
         } else {
           Alert.alert('Invalid file type', 'Please select a valid video file.');
         }
-      } else {
-        console.log('Document picker canceled or failed:', result);
       }
     } catch (error) {
       console.error('Error picking video:', error);
@@ -57,16 +52,15 @@ const AssignmentDetailScreen: React.FC<AssignmentDetailScreenProps> = ({ route }
     }
   };
 
-  // Record video (using expo-image-picker for simplicity)
   const recordVideo = async () => {
     try {
       const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
-      if (permissionResult.status === 'granted') { // Check permission status
+      if (permissionResult.status === 'granted') {
         const video = await ImagePicker.launchCameraAsync({
           mediaTypes: ImagePicker.MediaTypeOptions.Videos,
         });
         if (!video.cancelled) {
-          setSelectedFile(video.uri ?? null); // Handle potential undefined
+          setSelectedFile(video.uri ?? null);
         }
       } else {
         Alert.alert('Permission required', 'You need to enable camera permissions to record a video.');
@@ -77,58 +71,59 @@ const AssignmentDetailScreen: React.FC<AssignmentDetailScreenProps> = ({ route }
     }
   };
 
-  // Handle submission
   const handleSubmit = async () => {
-    if (selectedFile) {
-      console.log('Submitting video:', selectedFile);
-      setIsLoading(true); // Start loading
-      try {
-        const formData = new FormData();
-        const assignmentId = assignment.id; // Use the actual assignment ID passed
-
-        // Include required fields in FormData
-        formData.append('assignment', assignmentId);
-        formData.append('title', assignment.title);
-        formData.append('description', assignment.description);
-        formData.append('cmp_video', {
-          uri: selectedFile,
-          name: 'video.mp4',
-          type: 'video/mp4',
-        });
-        
-        // Include additional fields
-        formData.append('thumbnail', thumbnail);
-        formData.append('hls_name', hlsName);
-        formData.append('hls_path', hlsPath);
-        formData.append('status', status);
-        
-        // Convert and append isRunning
-        const isRunningValue = isRunning.trim().toLowerCase() === 'true';
-        formData.append('is_running', isRunningValue);
-
-        // Proceed with the upload
-        const uploadResponse = await axios.post('http://196.252.197.151:8000/api/vd/upload', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-        console.log('Upload successful:', uploadResponse.data);
-        Alert.alert('Success', 'Video uploaded successfully!');
-      } catch (error) {
-        // Enhanced error logging
-        if (axios.isAxiosError(error)) {
-          console.error('Error message:', error.message);
-          if (error.response) {
-            console.error('Error response data:', error.response.data);
-          }
-        }
-        Alert.alert('Error', 'An error occurred while uploading the video.');
-      } finally {
-        setIsLoading(false); // Stop loading
-      }
-    } else {
-      console.log('No file selected');
+    if (!selectedFile) {
       Alert.alert('No File', 'Please select a video file to submit.');
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const formData = new FormData();
+      const assignmentId = assignment.id;
+
+      formData.append('assignment', assignmentId.toString());
+      formData.append('title', assignment.title);
+      formData.append('description', assignment.description);
+      formData.append('cmp_video', {
+        uri: selectedFile,
+        name: 'video.mp4',
+        type: 'video/mp4',
+      });
+      formData.append('thumbnail', thumbnail);
+      formData.append('hls_name', hlsName);
+      formData.append('hls_path', hlsPath);
+      formData.append('status', status);
+      formData.append('is_running', isRunning.trim().toLowerCase() === 'true' ? 'true' : 'false');
+
+      const token = await AsyncStorage.getItem('token');
+      const csrfToken = await AsyncStorage.getItem('csrf_token');
+
+      const uploadResponse = await axios.post('http://192.168.120.11:8000/api/vd/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+          'X-CSRFToken': csrfToken,
+        },
+      });
+
+      console.log('Upload successful:', uploadResponse.data);
+      Alert.alert('Success', 'Video uploaded successfully!');
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error('Error message:', error.message);
+        if (error.response) {
+          console.error('Error response data:', error.response.data);
+          Alert.alert('Error', error.response.data.detail || 'An error occurred while uploading the video.');
+        } else {
+          Alert.alert('Error', 'An error occurred while uploading the video.');
+        }
+      } else {
+        console.error('General Error:', error);
+        Alert.alert('Error', 'An unexpected error occurred.');
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -136,11 +131,8 @@ const AssignmentDetailScreen: React.FC<AssignmentDetailScreenProps> = ({ route }
     <View style={styles.container}>
       <Text style={styles.title}>Title: {assignment.title}</Text>
       <Text style={styles.dueDate}>Due Date: {assignment.due_date}</Text>
-
-      {/* Description moved to the bottom */}
       <Text style={styles.description}>Description: {assignment.description}</Text>
 
-      {/* Text inputs for additional fields */}
       <TextInput
         style={styles.input}
         placeholder="Thumbnail URL"
@@ -172,24 +164,22 @@ const AssignmentDetailScreen: React.FC<AssignmentDetailScreenProps> = ({ route }
         onChangeText={setIsRunning}
       />
 
-      {/* Instruction box positioned after isRunning input */}
       <View style={styles.instructionBox}>
         <Text style={styles.instruction}>
           Please choose to upload a video from your files or record a video using your camera, then click submit.
         </Text>
       </View>
 
-      {/* File picker and submit buttons */}
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={pickVideo}>
-          <Text style={styles.buttonText}>Upload a video</Text>
+          <Text style={styles.buttonText}>Upload a Video</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={recordVideo}>
-          <Text style={styles.buttonText}>Record a video</Text>
+          <Text style={styles.buttonText}>Record a Video</Text>
         </TouchableOpacity>
-        <TouchableOpacity 
-          style={[styles.button, { opacity: selectedFile ? 1 : 0.5 }]} 
-          onPress={handleSubmit} 
+        <TouchableOpacity
+          style={[styles.button, { opacity: selectedFile ? 1 : 0.5 }]}
+          onPress={handleSubmit}
           disabled={!selectedFile || isLoading}
         >
           <Text style={styles.buttonText}>Submit Video</Text>
@@ -206,49 +196,48 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    justifyContent: 'space-between', // Ensure content is spaced out
+    justifyContent: 'space-between',
   },
   title: {
-    fontSize: 20, // Decreased font size for Title
+    fontSize: 20,
     fontWeight: 'bold',
   },
   dueDate: {
-    fontSize: 20, // Decreased font size for Due Date
-    fontWeight: 'bold', // Bold text
+    fontSize: 20,
+    fontWeight: 'bold',
     marginBottom: 8,
   },
   description: {
-    
     fontWeight: 'bold',
     fontSize: 20,
   },
   instructionBox: {
     padding: 10,
-    backgroundColor: '#ffffff', // White background
+    backgroundColor: '#ffffff',
     borderWidth: 2,
-    borderColor: '#6a5acd', // Purple border
+    borderColor: '#6a5acd',
     borderRadius: 8,
     marginVertical: 16,
   },
   instruction: {
     fontSize: 16,
     textAlign: 'center',
-    color: 'red', // Red color for instruction
+    color: 'red',
   },
   buttonContainer: {
     flexDirection: 'column',
     alignItems: 'center',
-    marginBottom: 20, // Spacing before inputs
+    marginBottom: 20,
   },
   button: {
-    backgroundColor: '#6a5acd', // Purple color
-    padding: 8, // Decreased padding
+    backgroundColor: '#6a5acd',
+    padding: 8,
     borderRadius: 5,
-    width: '80%', // Button width
+    width: '80%',
     marginVertical: 8,
   },
   buttonText: {
-    color: '#ffffff', // White text
+    color: '#ffffff',
     textAlign: 'center',
     fontWeight: 'bold',
   },
