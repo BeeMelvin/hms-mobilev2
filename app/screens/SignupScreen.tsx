@@ -5,25 +5,51 @@ import { useNavigation } from '@react-navigation/native';
 
 export default function SignupScreen() {
   const [username, setUsername] = useState('');
+  const [studentNumber, setStudentNumber] = useState(''); // New state for student number
+  const [firstName, setFirstName] = useState(''); // New state for first name
+  const [lastName, setLastName] = useState(''); // New state for last name
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [password2, setPassword2] = useState(''); // New state for password confirmation
   const navigation = useNavigation();
 
   const handleSignup = async () => {
     // Validate input fields
-    if (username === '' || email === '' || password === '') {
+    if (
+      username === '' ||
+      studentNumber === '' ||
+      firstName === '' ||
+      lastName === '' ||
+      email === '' ||
+      password === '' ||
+      password2 === ''
+    ) {
       Alert.alert('Error', 'Please fill in all fields');
+      return;
+    }
+
+    // Check if passwords match
+    if (password !== password2) {
+      Alert.alert('Error', 'Passwords do not match');
       return;
     }
 
     try {
       // Make the signup request to the API
-      const response = await fetch('http://196.252.197.151:8000/api/usr/create', {
+      const response = await fetch('http://192.168.120.11:8000/api/usr/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, email, password }),
+        body: JSON.stringify({
+          username,
+          student_number: studentNumber, // Include student number
+          first_name: firstName, // Include first name
+          last_name: lastName, // Include last name
+          email,
+          password,
+          password2,
+        }),
       });
 
       // Check if the response was ok
@@ -36,9 +62,9 @@ export default function SignupScreen() {
       // Parse the response data
       const data = await response.json();
       Alert.alert('Success', `User ${data.username} registered successfully! A verification code has been sent to your email.`);
-      
+
       // Optionally navigate to a verification screen or handle verification code here
-      navigation.navigate('Verification', { verificationCode: data.verification_code }); 
+      navigation.navigate('Verification', { verificationCode: data.verification_code });
 
     } catch (error) {
       console.error('Signup error:', error);
@@ -58,6 +84,27 @@ export default function SignupScreen() {
       />
       <TextInput
         style={styles.input}
+        placeholder="Student Number" // New field for student number
+        value={studentNumber}
+        onChangeText={setStudentNumber}
+        placeholderTextColor="#888"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="First Name" // New field for first name
+        value={firstName}
+        onChangeText={setFirstName}
+        placeholderTextColor="#888"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Last Name" // New field for last name
+        value={lastName}
+        onChangeText={setLastName}
+        placeholderTextColor="#888"
+      />
+      <TextInput
+        style={styles.input}
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
@@ -68,6 +115,14 @@ export default function SignupScreen() {
         placeholder="Password"
         value={password}
         onChangeText={setPassword}
+        secureTextEntry
+        placeholderTextColor="#888"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Confirm Password" // New field for password confirmation
+        value={password2}
+        onChangeText={setPassword2}
         secureTextEntry
         placeholderTextColor="#888"
       />
