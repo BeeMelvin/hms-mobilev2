@@ -13,7 +13,8 @@ import SettingsScreen from '../screens/SettingScreen';
 import HelpScreen from '../screens/HelpScreen';
 import ContactUsScreen from '../screens/ContactUsScreen';
 import LogoutScreen from '../screens/LogoutScreen';
-// // Defining screen names
+
+// Defining screen names
 type RootStackParamList = {
   Home: undefined;
   Assignments: undefined;
@@ -77,6 +78,8 @@ function HomeScreen() {
           </TouchableOpacity>
         ))}
       </View>
+      <Text style={styles.versionText}>Version: 1.0.0</Text>
+      <Text style={styles.copyrightText}>© {new Date().getFullYear()} HMS App. All rights reserved.</Text>
     </View>
   );
 }
@@ -122,6 +125,15 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 16,
+    color: "#333",
+  },
+  versionText: {
+    marginTop: 20,
+    fontSize: 14,
+    color: "#333",
+  },
+  copyrightText: {
+    fontSize: 14,
     color: "#333",
   },
 });
