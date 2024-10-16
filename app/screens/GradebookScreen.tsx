@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
 
 interface Grade {
   id: number;
@@ -59,20 +59,18 @@ const GradesScreen: React.FC = () => {
         setLoading(false);
       }
     };
-
     fetchGrades();
   }, []);
 
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Your Grades</Text>
-
       {loading ? (
-        <ActivityIndicator size="large" color="#6200EA" />
+        <ActivityIndicator size="large" color="#6200ea" />
       ) : error ? (
         <Text style={styles.error}>{error}</Text>
       ) : (
-        <ScrollView>
+        <ScrollView contentContainerStyle={styles.scrollView}>
           {data.length > 0 ? (
             data.map((item) => (
               <View key={item.id} style={styles.card}>
@@ -95,35 +93,43 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: '#f0f8ff', // Light blue background
   },
   header: {
-    fontSize: 26,
-    fontWeight: '600',
-    color: '#6200EA', // Dark purple
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#6200ea',
     marginBottom: 20,
     textAlign: 'center',
+    fontFamily: 'sans-serif', // Universally supported font
+  },
+  scrollView: {
+    paddingBottom: 20,
   },
   card: {
-    backgroundColor: '#fff',
-    padding: 15,
+    backgroundColor: '#ffffff',
+    padding: 20,
     marginVertical: 10,
-    borderRadius: 10,
-    elevation: 3,
+    borderRadius: 12,
+    elevation: 5,
     shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 3 },
+    borderLeftWidth: 8,
+    borderLeftColor: '#6200ea', // Accent color
   },
   title: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '700',
     marginBottom: 8,
     color: '#333',
   },
   feedback: {
-    fontSize: 14,
-    color: '#777',
+    fontSize: 16,
+    color: '#555',
     marginBottom: 8,
+    lineHeight: 22,
   },
   grade: {
     fontSize: 16,
@@ -131,12 +137,11 @@ const styles = StyleSheet.create({
     color: '#4CAF50', // Green for grade
   },
   createdAt: {
-    fontSize: 13,
-    color: '#777',
+    fontSize: 14,
+    color: '#999',
   },
   error: {
     color: '#ff0000',
-    marginBottom: 10,
     textAlign: 'center',
   },
   noGrades: {

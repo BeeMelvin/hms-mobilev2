@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient'; // Make sure to install expo-linear-gradient
+import { LinearGradient } from 'expo-linear-gradient'; // Ensure expo-linear-gradient is installed
 
 const SubmissionsScreen = () => {
   const [submissions, setSubmissions] = useState([]);
@@ -39,16 +39,14 @@ const SubmissionsScreen = () => {
         setLoading(false);
       }
     };
-
     fetchSubmissions();
   }, []);
 
   return (
-    <LinearGradient colors={['#f9f9f9', '#e0e0e0']} style={styles.container}>
+    <LinearGradient colors={['#f0f8ff', '#f0f8ff']} style={styles.container}>
       <Text style={styles.header}>Your Submissions</Text>
-
       {loading ? (
-        <ActivityIndicator size="large" color="#6200EA" />
+        <ActivityIndicator size="large" color="#6200ea" />
       ) : error ? (
         <Text style={styles.error}>{error}</Text>
       ) : (
@@ -73,41 +71,41 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    backgroundColor: '#f0f8ff', // Light blue background
   },
   header: {
-    fontSize: 26,
-    fontWeight: '600',
-    color: '#6200EA',
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#6200ea',
     marginBottom: 20,
     textAlign: 'center',
-    textShadowColor: '#ccc',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 3,
+    fontFamily: 'sans-serif', // Universally supported font
   },
   scrollView: {
     paddingBottom: 20,
   },
   card: {
-    backgroundColor: '#fff',
-    padding: 15,
+    backgroundColor: '#ffffff',
+    padding: 20,
     marginVertical: 10,
-    borderRadius: 10,
+    borderRadius: 12,
     elevation: 5,
     shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    borderWidth: 1,
-    borderColor: '#e0e0e0',
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 3 },
+    borderLeftWidth: 8,
+    borderLeftColor: '#6200ea', // Accent color
   },
   title: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '700',
+    marginBottom: 8,
     color: '#333',
   },
   createdAt: {
-    fontSize: 13,
-    color: '#777',
-    marginTop: 5,
+    fontSize: 14,
+    color: '#999',
   },
   error: {
     color: '#ff0000',

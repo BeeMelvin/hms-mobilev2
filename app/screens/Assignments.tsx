@@ -14,13 +14,12 @@ const AssignmentsScreen: React.FC = () => {
   const [data, setData] = useState<Assignment[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-
   const navigation = useNavigation(); // Get navigation object
-  
+
   const fetchAssignments = async () => {
     try {
       setLoading(true);
-      const response = await axios.get<Assignment[]>('http://196.252.198.215:8000/api/assign/view');
+      const response = await axios.get<Assignment[]>('http://192.168.120.11:8000/api/assign/view');
       console.log(response.data);
       setData(response.data);
     } catch (error) {
@@ -38,7 +37,6 @@ const AssignmentsScreen: React.FC = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Your Assignments</Text>
-
       {loading ? (
         <ActivityIndicator size="large" color="#6200EA" />
       ) : error ? (
@@ -77,45 +75,48 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: '#f0f8ff', // Light blue background
   },
   header: {
-    fontSize: 26,
-    fontWeight: '600',
-    color: '#6200EA', // Dark purple
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#6200ea',
     marginBottom: 20,
     textAlign: 'center',
+    fontFamily: 'sans-serif', // Universally supported font
   },
   card: {
-    backgroundColor: '#fff',
-    padding: 15,
+    backgroundColor: '#ffffff',
+    padding: 20,
     marginVertical: 10,
-    borderRadius: 10,
-    elevation: 3,
+    borderRadius: 12,
+    elevation: 5,
     shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    borderWidth: 1,
-    borderColor: '#6200EA', // Purple border
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 3 },
+    borderLeftWidth: 8,
+    borderLeftColor: '#6200ea', // Accent color
   },
   title: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '700',
     marginBottom: 8,
     color: '#333',
   },
   description: {
-    fontSize: 14,
-    color: '#777',
-    marginBottom: 8,
+    fontSize: 16,
+    color: '#555',
+    marginBottom: 10,
+    lineHeight: 22,
   },
   dueDate: {
-    fontSize: 13,
-    color: '#FF1744', // Red for due date
+    fontSize: 14,
+    color: '#ff1744', // Red for due date
     marginBottom: 12,
   },
   openButton: {
-    backgroundColor: '#6200EA',
+    backgroundColor: '#6200ea',
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: 'center',
@@ -126,7 +127,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   retryButton: {
-    backgroundColor: '#6200EA',
+    backgroundColor: '#6200ea',
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: 'center',

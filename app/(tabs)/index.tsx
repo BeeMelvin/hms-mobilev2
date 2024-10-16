@@ -65,7 +65,7 @@ function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.headerText}>Welcome to the HMS App!</Text>
+      <Text style={styles.headerText}>Welcome!</Text>
       <View style={styles.buttonContainer}>
         {buttons.map((button, index) => (
           <TouchableOpacity
