@@ -1,5 +1,7 @@
 declare module 'expo-document-picker' {
     export interface DocumentPickerResult {
+      canceled: any;
+      assets: boolean;
       type: string; // Type of the document
       uri: string; // URI of the selected document
       name: string; // Name of the document

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Button, StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, Button, StyleSheet, Alert, ActivityIndicator, TextInput } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
@@ -10,6 +10,7 @@ interface AssignmentDetailScreenProps {
       assignment: {
         title: string;
         description: string;
+        id: number;
       };
     };
   };
@@ -20,6 +21,13 @@ const AssignmentDetailScreen: React.FC<AssignmentDetailScreenProps> = ({ route }
   const { assignment } = route.params; // Get passed assignment data
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  // New states for the additional fields
+  const [thumbnail, setThumbnail] = useState('');
+  const [hlsName, setHlsName] = useState('');
+  const [hlsPath, setHlsPath] = useState('');
+  const [status, setStatus] = useState('');
+  const [isRunning, setIsRunning] = useState('');
 
   // File picker for video upload
   const pickVideo = async () => {
@@ -32,8 +40,8 @@ const AssignmentDetailScreen: React.FC<AssignmentDetailScreenProps> = ({ route }
       // Check if the result contains assets
       if (result.assets && result.assets.length > 0) {
         const videoAsset = result.assets[0];
-        // Check MIME type
         const mimeType = videoAsset.mimeType;
+
         if (mimeType && mimeType.startsWith('video/')) {
           setSelectedFile(videoAsset.uri); // Set the uri from the asset
         } else {
@@ -74,21 +82,45 @@ const AssignmentDetailScreen: React.FC<AssignmentDetailScreenProps> = ({ route }
       console.log('Submitting video:', selectedFile);
       setIsLoading(true); // Start loading
       try {
-        const response = await fetch(selectedFile);
-        const blob = await response.blob();
-
         const formData = new FormData();
-        formData.append('video', blob, 'video.mp4');
+        const assignmentId = assignment.id; // Use the actual assignment ID passed
 
-        await axios.post('http://192.168.120.11:8000/api/vd/upload', formData, {
+        // Include required fields in FormData
+        formData.append('assignment', assignmentId);
+        formData.append('title', assignment.title);
+        formData.append('description', assignment.description);
+        formData.append('cmp_video', {
+          uri: selectedFile,
+          name: 'video.mp4',
+          type: 'video/mp4',
+        });
+        
+        // Include additional fields
+        formData.append('thumbnail', thumbnail);
+        formData.append('hls_name', hlsName);
+        formData.append('hls_path', hlsPath);
+        formData.append('status', status);
+        
+        // Convert and append isRunning
+        const isRunningValue = isRunning.trim().toLowerCase() === 'true';
+        formData.append('is_running', isRunningValue);
+
+        // Proceed with the upload
+        const uploadResponse = await axios.post('http://196.252.198.215:8000e/api/vd/upload', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
-
+        console.log('Upload successful:', uploadResponse.data);
         Alert.alert('Success', 'Video uploaded successfully!');
       } catch (error) {
-        console.error('Error uploading video:', error);
+        // Enhanced error logging
+        if (axios.isAxiosError(error)) {
+          console.error('Error message:', error.message);
+          if (error.response) {
+            console.error('Error response data:', error.response.data);
+          }
+        }
         Alert.alert('Error', 'An error occurred while uploading the video.');
       } finally {
         setIsLoading(false); // Stop loading
@@ -107,9 +139,41 @@ const AssignmentDetailScreen: React.FC<AssignmentDetailScreenProps> = ({ route }
       <Button title="Pick a video" onPress={pickVideo} />
       <Button title="Record a video" onPress={recordVideo} />
       <Button title="Submit Video" onPress={handleSubmit} disabled={!selectedFile || isLoading} />
-
+      
       {isLoading && <ActivityIndicator size="large" color="#0000ff" />}
       {selectedFile && <Text style={styles.file}>Selected file: {selectedFile}</Text>}
+
+      {/* Text inputs for additional fields */}
+      <TextInput
+        style={styles.input}
+        placeholder="Thumbnail URL"
+        value={thumbnail}
+        onChangeText={setThumbnail}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="HLS Name"
+        value={hlsName}
+        onChangeText={setHlsName}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="HLS Path"
+        value={hlsPath}
+        onChangeText={setHlsPath}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Status"
+        value={status}
+        onChangeText={setStatus}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Is Running (true/false)"
+        value={isRunning}
+        onChangeText={setIsRunning}
+      />
     </View>
   );
 };
@@ -131,6 +195,14 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 14,
     color: 'blue',
+  },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 12,
+    paddingHorizontal: 8,
+    borderRadius: 4,
   },
 });
 

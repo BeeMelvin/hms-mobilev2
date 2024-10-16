@@ -19,15 +19,15 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
 
 const buttons = [
-  { title: "Announcements", image: { uri: "https://via.placeholder.com/50" } },
-  { title: "Assignments", image: { uri: "https://via.placeholder.com/50" } },
-  { title: "Submissions", image: { uri: "https://via.placeholder.com/50" } },
-  { title: "Gradebook", image: { uri: "https://via.placeholder.com/50" } },
-  { title: "Settings", image: { uri: "https://via.placeholder.com/50" } },
-  { title: "Help", image: { uri: "https://via.placeholder.com/50" } },
-  { title: "Contact Us", image: { uri: "https://via.placeholder.com/50" } },
-  { title: "Log Out", image: { uri: "https://via.placeholder.com/50" } },
-];
+  { title: "Announcements", image: require('./assets/announcements.png') },
+  { title: "Assignments", image: require('./assets/assignments.png') },
+  { title: "Submissions", image: require('./assets/submission.png') },
+  { title: "Gradebook", image: require('./assets/gradebook.png') },
+  { title: "Settings", image: require('./assets/settings.png') },
+  { title: "Help", image: require('./assets/help.png') },
+  { title: "Contact Us", image: require('./assets/contact.png') },
+  { title: "Log Out", image: require('./assets/logout.png') },
+]
 
 // Create stack navigator
 export default function App() {
