@@ -36,13 +36,7 @@ const HelpScreen = () => {
         <Text style={styles.link}>Submit Feedback</Text>
       </TouchableOpacity>
 
-      <Text style={styles.header}>External Resources</Text>
-      <TouchableOpacity onPress={() => openURL('https://university.edu/resources')} style={styles.linkButton}>
-        <Text style={styles.link}>University Resources</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => openURL('https://mentalhealth.edu')} style={styles.linkButton}>
-        <Text style={styles.link}>Mental Health Resources</Text>
-      </TouchableOpacity>
+  
     </ScrollView>
   );
 };
