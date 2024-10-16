@@ -10,6 +10,7 @@ interface AssignmentDetailScreenProps {
       assignment: {
         title: string;
         description: string;
+        due_date: string; // Added due_date to the assignment object
         id: number;
       };
     };
@@ -133,8 +134,11 @@ const AssignmentDetailScreen: React.FC<AssignmentDetailScreenProps> = ({ route }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{assignment.title}</Text>
-      <Text style={styles.description}>{assignment.description}</Text>
+      <Text style={styles.title}>Title: {assignment.title}</Text>
+      <Text style={styles.dueDate}>Due Date: {assignment.due_date}</Text>
+
+      {/* Description moved to the bottom */}
+      <Text style={styles.description}>Description: {assignment.description}</Text>
 
       {/* Text inputs for additional fields */}
       <TextInput
@@ -168,15 +172,26 @@ const AssignmentDetailScreen: React.FC<AssignmentDetailScreenProps> = ({ route }
         onChangeText={setIsRunning}
       />
 
-      {/* File picker and submit buttons placed at the bottom */}
+      {/* Instruction box positioned after isRunning input */}
+      <View style={styles.instructionBox}>
+        <Text style={styles.instruction}>
+          Please choose to upload a video from your files or record a video using your camera, then click submit.
+        </Text>
+      </View>
+
+      {/* File picker and submit buttons */}
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={pickVideo}>
-          <Text style={styles.buttonText}>Pick a video</Text>
+          <Text style={styles.buttonText}>Upload a video</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={recordVideo}>
           <Text style={styles.buttonText}>Record a video</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={handleSubmit} disabled={!selectedFile || isLoading}>
+        <TouchableOpacity 
+          style={[styles.button, { opacity: selectedFile ? 1 : 0.5 }]} 
+          onPress={handleSubmit} 
+          disabled={!selectedFile || isLoading}
+        >
           <Text style={styles.buttonText}>Submit Video</Text>
         </TouchableOpacity>
       </View>
@@ -191,15 +206,51 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    justifyContent: 'space-between', // Ensures buttons stay at the bottom
+    justifyContent: 'space-between', // Ensure content is spaced out
   },
   title: {
-    fontSize: 24,
+    fontSize: 20, // Decreased font size for Title
     fontWeight: 'bold',
   },
+  dueDate: {
+    fontSize: 20, // Decreased font size for Due Date
+    fontWeight: 'bold', // Bold text
+    marginBottom: 8,
+  },
   description: {
+    
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
+  instructionBox: {
+    padding: 10,
+    backgroundColor: '#ffffff', // White background
+    borderWidth: 2,
+    borderColor: '#6a5acd', // Purple border
+    borderRadius: 8,
     marginVertical: 16,
+  },
+  instruction: {
     fontSize: 16,
+    textAlign: 'center',
+    color: 'red', // Red color for instruction
+  },
+  buttonContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginBottom: 20, // Spacing before inputs
+  },
+  button: {
+    backgroundColor: '#6a5acd', // Purple color
+    padding: 8, // Decreased padding
+    borderRadius: 5,
+    width: '80%', // Button width
+    marginVertical: 8,
+  },
+  buttonText: {
+    color: '#ffffff', // White text
+    textAlign: 'center',
+    fontWeight: 'bold',
   },
   file: {
     marginTop: 10,
@@ -213,20 +264,6 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     paddingHorizontal: 8,
     borderRadius: 4,
-  },
-  buttonContainer: {
-    marginTop: 20,
-  },
-  button: {
-    backgroundColor: '#6200EA', // Purple background
-    borderRadius: 8,
-    padding: 16,
-    marginVertical: 8,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#fff', // White text
-    fontSize: 16,
   },
 });
 
