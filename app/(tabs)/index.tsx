@@ -27,7 +27,7 @@ const buttons = [
   { title: "Help", image: require('./assets/help.png') },
   { title: "Contact Us", image: require('./assets/contact.png') },
   { title: "Log Out", image: require('./assets/logout.png') },
-]
+];
 
 // Create stack navigator
 export default function App() {
@@ -46,12 +46,7 @@ function HomeScreen() {
   const navigation = useNavigation<HomeScreenNavigationProp>(); // Get navigation object
 
   const handleNavigation = (screen: keyof RootStackParamList) => {
-    // Check if the screen is Assignments to pass necessary params
-    if (screen === 'Assignments') {
-      navigation.navigate(screen);
-    } else {
-      navigation.navigate(screen);
-    }
+    navigation.navigate(screen);
   };
 
   return (
@@ -62,7 +57,7 @@ function HomeScreen() {
           <TouchableOpacity
             key={index}
             style={styles.button}
-            onPress={() => handleNavigation(button.title as keyof RootStackParamList)} // Type assertion here
+            onPress={() => handleNavigation(button.title as keyof RootStackParamList)}
           >
             <Image source={button.image} style={styles.image} />
             <Text style={styles.buttonText}>{button.title}</Text>
@@ -79,12 +74,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 16,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#f5f5f5", // Light grey background
   },
   headerText: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#333",
+    color: "#6200EA", // Purple color for header
     marginBottom: 20,
   },
   buttonContainer: {
@@ -104,6 +99,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
+    borderColor: "#6200EA", // Border color to match the theme
+    borderWidth: 1,
   },
   image: {
     width: 50,

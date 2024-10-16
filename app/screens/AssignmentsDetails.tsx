@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Button, StyleSheet, Alert, ActivityIndicator, TextInput } from 'react-native';
+import { View, Text, Button, StyleSheet, Alert, ActivityIndicator, TextInput, TouchableOpacity } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
@@ -106,7 +106,7 @@ const AssignmentDetailScreen: React.FC<AssignmentDetailScreenProps> = ({ route }
         formData.append('is_running', isRunningValue);
 
         // Proceed with the upload
-        const uploadResponse = await axios.post('http://196.252.198.215:8000e/api/vd/upload', formData, {
+        const uploadResponse = await axios.post('http://196.252.198.215:8000/api/vd/upload', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -135,13 +135,6 @@ const AssignmentDetailScreen: React.FC<AssignmentDetailScreenProps> = ({ route }
     <View style={styles.container}>
       <Text style={styles.title}>{assignment.title}</Text>
       <Text style={styles.description}>{assignment.description}</Text>
-
-      <Button title="Pick a video" onPress={pickVideo} />
-      <Button title="Record a video" onPress={recordVideo} />
-      <Button title="Submit Video" onPress={handleSubmit} disabled={!selectedFile || isLoading} />
-      
-      {isLoading && <ActivityIndicator size="large" color="#0000ff" />}
-      {selectedFile && <Text style={styles.file}>Selected file: {selectedFile}</Text>}
 
       {/* Text inputs for additional fields */}
       <TextInput
@@ -174,6 +167,22 @@ const AssignmentDetailScreen: React.FC<AssignmentDetailScreenProps> = ({ route }
         value={isRunning}
         onChangeText={setIsRunning}
       />
+
+      {/* File picker and submit buttons placed at the bottom */}
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.button} onPress={pickVideo}>
+          <Text style={styles.buttonText}>Pick a video</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={recordVideo}>
+          <Text style={styles.buttonText}>Record a video</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={handleSubmit} disabled={!selectedFile || isLoading}>
+          <Text style={styles.buttonText}>Submit Video</Text>
+        </TouchableOpacity>
+      </View>
+
+      {isLoading && <ActivityIndicator size="large" color="#0000ff" />}
+      {selectedFile && <Text style={styles.file}>Selected file: {selectedFile}</Text>}
     </View>
   );
 };
@@ -182,6 +191,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    justifyContent: 'space-between', // Ensures buttons stay at the bottom
   },
   title: {
     fontSize: 24,
@@ -203,6 +213,20 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     paddingHorizontal: 8,
     borderRadius: 4,
+  },
+  buttonContainer: {
+    marginTop: 20,
+  },
+  button: {
+    backgroundColor: '#6200EA', // Purple background
+    borderRadius: 8,
+    padding: 16,
+    marginVertical: 8,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#fff', // White text
+    fontSize: 16,
   },
 });
 

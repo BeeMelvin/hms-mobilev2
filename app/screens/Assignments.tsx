@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, Button, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from 'expo-router';
 
@@ -7,7 +7,7 @@ interface Assignment {
   id: number;
   title: string;
   description: string;
-  due_date: string;  
+  due_date: string;
 }
 
 const AssignmentsScreen: React.FC = () => {
@@ -21,10 +21,11 @@ const AssignmentsScreen: React.FC = () => {
     try {
       setLoading(true);
       const response = await axios.get<Assignment[]>('http://196.252.198.215:8000/api/assign/view');
+      console.log(response.data);
       setData(response.data);
     } catch (error) {
       console.error(error);
-      setError("Failed to load assignments. Please try again later.");
+      setError('Failed to load assignments. Please try again later.');
     } finally {
       setLoading(false);
     }
@@ -36,14 +37,16 @@ const AssignmentsScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Assignments</Text>
+      <Text style={styles.header}>Your Assignments</Text>
 
       {loading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
+        <ActivityIndicator size="large" color="#6200EA" />
       ) : error ? (
         <View>
           <Text style={styles.error}>{error}</Text>
-          <Button title="Retry" onPress={fetchAssignments} />
+          <TouchableOpacity style={styles.retryButton} onPress={fetchAssignments}>
+            <Text style={styles.retryText}>Retry</Text>
+          </TouchableOpacity>
         </View>
       ) : (
         <ScrollView>
@@ -53,10 +56,12 @@ const AssignmentsScreen: React.FC = () => {
                 <Text style={styles.title}>{item.title}</Text>
                 <Text style={styles.description}>{item.description}</Text>
                 <Text style={styles.dueDate}>Due: {item.due_date}</Text>
-                <Button
-                  title="Open"
-                  onPress={() => navigation.navigate('AssignmentsDetails', { assignment: item })} // Update this line
-                />
+                <TouchableOpacity
+                  style={styles.openButton}
+                  onPress={() => navigation.navigate('AssignmentsDetails', { assignment: item })}
+                >
+                  <Text style={styles.openButtonText}>Open</Text>
+                </TouchableOpacity>
               </View>
             ))
           ) : (
@@ -72,11 +77,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#f9f9f9',
   },
   header: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    fontSize: 26,
+    fontWeight: '600',
+    color: '#6200EA', // Dark purple
     marginBottom: 20,
     textAlign: 'center',
   },
@@ -84,35 +90,62 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 15,
     marginVertical: 10,
-    borderRadius: 8,
+    borderRadius: 10,
     elevation: 3,
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowRadius: 5,
+    borderWidth: 1,
+    borderColor: '#6200EA', // Purple border
   },
   title: {
     fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 5,
+    fontWeight: '700',
+    marginBottom: 8,
+    color: '#333',
   },
   description: {
     fontSize: 14,
-    color: '#333',
-    marginBottom: 10,
+    color: '#777',
+    marginBottom: 8,
   },
   dueDate: {
-    fontSize: 12,
-    color: '#ff0000', // Red color for due date
+    fontSize: 13,
+    color: '#FF1744', // Red for due date
+    marginBottom: 12,
+  },
+  openButton: {
+    backgroundColor: '#6200EA',
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  openButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  retryButton: {
+    backgroundColor: '#6200EA',
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  retryText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '500',
   },
   error: {
-    color: 'red',
+    color: '#ff0000',
     marginBottom: 10,
     textAlign: 'center',
   },
   noAssignments: {
     textAlign: 'center',
     marginTop: 20,
-    fontSize: 16,
+    fontSize: 18,
     color: '#777',
   },
 });
