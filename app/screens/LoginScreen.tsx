@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 24,
     textAlign: 'center',
-    color: '#4B0082', // Dark purple for the title
+    color: 'black', 
   },
   input: {
     height: 50,
