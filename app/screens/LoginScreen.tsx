@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import * as SecureStore from 'expo-secure-store'; 
 import { useNavigation } from '@react-navigation/native';
 
@@ -37,16 +37,18 @@ export default function LoginScreen() {
 
       // Parse the response data
       const data = await response.json();
+      const userName = data.username; // Adjust according to your API response
+
       // Store the access and refresh tokens in SecureStore
       await SecureStore.setItemAsync('userToken', data.access);
       await SecureStore.setItemAsync('refreshToken', data.refresh);
 
       Alert.alert('Success', 'Logged in successfully!');
-      // Navigate to the home screen
-      navigation.navigate('Home');
+
+      // Navigate to the home screen with the username
+      navigation.navigate('Home', { userName });
 
     } catch (error) {
-      // Log any errors that occur during the fetch
       console.error('Login error:', error);
       Alert.alert('Error', 'Something went wrong. Please check your internet connection and try again.');
     } finally {
@@ -56,63 +58,6 @@ export default function LoginScreen() {
 
   const handleForgotPassword = () => {
     Alert.alert('Forgot Password', 'A password reset link will be sent to your email.');
-  };
-
-  const refreshToken = async () => {
-    try {
-      // Retrieve the refresh token from SecureStore
-      const refreshToken = await SecureStore.getItemAsync('refreshToken');
-      if (!refreshToken) throw new Error('No refresh token found.');
-
-      // Make the request to refresh the token
-      const response = await fetch('http://192.168.120.11:8000/api/token/refresh/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ refresh: refreshToken }),
-      });
-
-      // Check if the response was ok
-      if (!response.ok) {
-        throw new Error('Failed to refresh token.');
-      }
-
-      // Parse the response data
-      const data = await response.json();
-      // Save the new access token
-      await SecureStore.setItemAsync('userToken', data.access);
-
-      return data.access; // Return the new access token
-    } catch (error) {
-      console.error('Error refreshing token:', error);
-      Alert.alert('Error', 'Session expired. Please log in again.');
-      navigation.navigate('Login');
-    }
-  };
-
-  const apiRequest = async (url, options = {}) => {
-    const token = await SecureStore.getItemAsync('userToken');
-
-    // Set the authorization header
-    const headers = {
-      ...options.headers,
-      Authorization: `Bearer ${token}`,
-    };
-
-    const response = await fetch(url, { ...options, headers });
-
-    if (response.status === 401) {
-      // If unauthorized, try refreshing the token
-      await refreshToken();
-      const newToken = await SecureStore.getItemAsync('userToken'); // Get the new token after refresh
-
-      // Retry the request with the new token
-      headers.Authorization = `Bearer ${newToken}`;
-      return fetch(url, { ...options, headers });
-    }
-
-    return response;
   };
 
   return (

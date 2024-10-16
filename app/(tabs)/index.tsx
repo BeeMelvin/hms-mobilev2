@@ -64,6 +64,7 @@ export default function App() {
 }
 
 function HomeScreen() {
+  
   const navigation = useNavigation<HomeScreenNavigationProp>(); // Get navigation object
 
   const handleNavigation = (screen: keyof RootStackParamList) => {
