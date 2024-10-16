@@ -5,10 +5,8 @@ const SettingsScreen = () => {
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
 
-  // Use effect to save dark mode preference to local storage or any preferred method
   useEffect(() => {
-    // Here you can implement saving preference to local storage or context
-    // For simplicity, we'll just log the current mode
+    
     console.log('Dark mode is now:', darkMode ? 'Enabled' : 'Disabled');
   }, [darkMode]);
 

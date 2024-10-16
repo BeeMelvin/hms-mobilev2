@@ -1,4 +1,4 @@
-// VerificationScreen.js
+
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import { useRoute } from '@react-navigation/native';
@@ -15,11 +15,10 @@ export default function VerificationScreen() {
       return;
     }
 
-    // Here, you would typically send the verification code to the server to validate
-    // For now, let's just check if it matches the expected code
+   
     if (verificationCode === expectedCode.toString()) {
       Alert.alert('Success', 'Verification successful! You can now log in.');
-      // Navigate to the login screen or perform any other action
+    
     } else {
       Alert.alert('Error', 'Invalid verification code. Please try again.');
     }

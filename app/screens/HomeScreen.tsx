@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     padding: 16,
     margin: 8,
     alignItems: 'center',
-    flexBasis: '45%', // Two buttons per row
+    flexBasis: '45%', 
     shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowRadius: 4,

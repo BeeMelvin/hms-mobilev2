@@ -45,12 +45,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#ffffff', // White background for a clean look
+    backgroundColor: '#ffffff', 
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#6200EA', // Purple color for title
+    color: '#6200EA', 
     marginBottom: 20,
     textAlign: 'center',
   },
@@ -58,33 +58,33 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginTop: 15,
-    color: '#333', // Dark grey for headers
+    color: '#333', 
   },
   faqContainer: {
     marginTop: 10,
     marginBottom: 15,
-    backgroundColor: '#f7f7f7', // Light grey background for FAQs
+    backgroundColor: '#f7f7f7', 
     borderRadius: 8,
     padding: 15,
     elevation: 1,
   },
   faq: {
     fontSize: 16,
-    fontWeight: '600', // Slightly bolder font for FAQs
+    fontWeight: '600', 
   },
   answer: {
     fontSize: 14,
     marginTop: 5,
-    color: '#555', // Darker grey for answers
+    color: '#555', 
   },
   linkButton: {
     marginTop: 10,
     padding: 10,
-    backgroundColor: '#6200EA', // Purple background for links
+    backgroundColor: '#6200EA', 
     borderRadius: 5,
   },
   link: {
-    color: '#ffffff', // White text for links
+    color: '#ffffff', 
     textAlign: 'center',
     fontSize: 16,
   },

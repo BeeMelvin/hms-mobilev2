@@ -1,4 +1,4 @@
-// AuthChoiceScreen.tsx
+
 import React from 'react';
 import { View, Text, Button, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -16,7 +16,7 @@ const AuthChoiceScreen = () => {
 
   return (
     <ImageBackground 
-      source={require('../(tabs)/assets/1.jpg')} // Updated path
+      source={require('../(tabs)/assets/1.jpg')} 
       style={styles.background}
     >
       <View style={styles.container}>
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   container: {
-    backgroundColor: 'rgba(255, 255, 255, 0.85)', // Semi-transparent white background for better readability
+    backgroundColor: 'rgba(255, 255, 255, 0.85)', 
     borderRadius: 10,
     padding: 30,
     alignItems: 'center',
@@ -74,14 +74,14 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 25, // Rounded button corners
-    marginVertical: 10, // Spacing between buttons
+    marginVertical: 10, 
     width: '80%', // Button width
-    alignItems: 'center', // Center button text
+    alignItems: 'center',
   },
   buttonText: {
-    color: '#FFFFFF', // White text color
-    fontSize: 18, // Font size of the button text
-    fontWeight: 'bold', // Bold text
+    color: '#FFFFFF', 
+    fontSize: 18, 
+    fontWeight: 'bold', 
   },
 });
 

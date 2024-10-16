@@ -40,7 +40,7 @@ const LogoutScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.confirmationText}>Are you sure you want to log out?</Text>
+      <Text style={styles.confirmationText}></Text>
       <Button title="Logout" onPress={handleLogout} />
     </View>
   );

@@ -38,7 +38,7 @@ export default function SignupScreen() {
       Alert.alert('Success', `User ${data.username} registered successfully! A verification code has been sent to your email.`);
       
       // Optionally navigate to a verification screen or handle verification code here
-      navigation.navigate('Verification', { verificationCode: data.verification_code }); // Add this screen as needed
+      navigation.navigate('Verification', { verificationCode: data.verification_code }); 
 
     } catch (error) {
       console.error('Signup error:', error);
@@ -97,26 +97,26 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 16,
-    backgroundColor: '#f7f9fc', // Light background color
+    backgroundColor: '#f7f9fc', 
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
     marginBottom: 20,
     textAlign: 'center',
-    color: '#333', // Darker text color for better readability
+    color: '#333', 
   },
   input: {
     height: 50,
     borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius: 8, // Rounded corners
+    borderRadius: 8, 
     marginBottom: 16,
     paddingLeft: 12,
-    backgroundColor: '#fff', // White input background
+    backgroundColor: '#fff', 
   },
   signupButton: {
-    backgroundColor: '#6200ee', // Primary color for the button
+    backgroundColor: '#6200ee', 
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
   orText: {
     textAlign: 'center',
     marginVertical: 12,
-    color: '#555', // Subtle color for the orText
+    color: '#555'
   },
   socialButtons: {
     flexDirection: 'row',

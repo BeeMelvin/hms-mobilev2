@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity } from 'react-native';
-import * as SecureStore from 'expo-secure-store'; // Import SecureStore for secure token storage
+import * as SecureStore from 'expo-secure-store'; 
 import { useNavigation } from '@react-navigation/native';
 
 export default function LoginScreen() {
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 16,
-    backgroundColor: '#f9f9f9', // Light background for better contrast
+    backgroundColor: '#f9f9f9', 
   },
   title: {
     fontSize: 28,
@@ -164,24 +164,24 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 16,
     paddingLeft: 16,
-    backgroundColor: '#fff', // White background for inputs
+    backgroundColor: '#fff', 
     fontSize: 16,
   },
   button: {
-    backgroundColor: '#6200ee', // Primary color for the button
+    backgroundColor: '#6200ee', 
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',
     marginBottom: 16,
   },
   buttonText: {
-    color: '#fff', // White text for button
+    color: '#fff', 
     fontSize: 18,
     fontWeight: 'bold',
   },
   forgotPassword: {
     marginTop: 12,
-    color: '#4B0082', // Purple color for "Forgot Password"
+    color: '#4B0082', 
     textAlign: 'center',
     fontWeight: '500',
   },

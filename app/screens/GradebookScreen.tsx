@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#f0f8ff', // Light blue background
+    backgroundColor: '#f0f8ff', 
   },
   header: {
     fontSize: 28,
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     color: '#6200ea',
     marginBottom: 20,
     textAlign: 'center',
-    fontFamily: 'sans-serif', // Universally supported font
+    fontFamily: 'sans-serif', 
   },
   scrollView: {
     paddingBottom: 20,
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     shadowOffset: { width: 0, height: 3 },
     borderLeftWidth: 8,
-    borderLeftColor: '#6200ea', // Accent color
+    borderLeftColor: '#6200ea', 
   },
   title: {
     fontSize: 20,
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
   grade: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#4CAF50', // Green for grade
+    color: '#4CAF50', 
   },
   createdAt: {
     fontSize: 14,
