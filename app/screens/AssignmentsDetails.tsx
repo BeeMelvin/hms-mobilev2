@@ -76,9 +76,8 @@ const AssignmentDetailScreen: React.FC<AssignmentDetailScreenProps> = ({ route }
     setIsLoading(true);
     try {
       const formData = new FormData();
-      const assignmentId = assignment.id;
 
-      formData.append('assignment', assignmentId.toString());
+      formData.append('assignment', assignment.id);
       formData.append('title', assignment.title);
       formData.append('description', assignment.description);
       formData.append('cmp_video', {
@@ -87,14 +86,15 @@ const AssignmentDetailScreen: React.FC<AssignmentDetailScreenProps> = ({ route }
         type: 'video/mp4',
       });
       
-
-      const token = await AsyncStorage.getItem('token');
+      const token = await AsyncStorage.getItem('access_token');
       const csrfToken = await AsyncStorage.getItem('csrf_token');
+
+      console.log(token);
+      console.log(formData);
 
       const uploadResponse = await axios.post('http://192.168.120.11:8000/api/vd/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${token}`,
           'X-CSRFToken': csrfToken,
         },
       });
