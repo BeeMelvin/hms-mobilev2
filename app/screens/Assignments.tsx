@@ -19,7 +19,7 @@ const AssignmentsScreen: React.FC = () => {
   const fetchAssignments = async () => {
     try {
       setLoading(true);
-      const response = await axios.get<Assignment[]>('http://192.168.120.11:8000/api/assign/view');
+      const response = await axios.get<Assignment[]>('http://196.252.197.151:8000/api/assign/view');
       console.log(response.data);
       setData(response.data);
     } catch (error) {

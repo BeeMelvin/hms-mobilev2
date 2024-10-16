@@ -107,7 +107,7 @@ const AssignmentDetailScreen: React.FC<AssignmentDetailScreenProps> = ({ route }
         formData.append('is_running', isRunningValue);
 
         // Proceed with the upload
-        const uploadResponse = await axios.post('http://196.252.198.215:8000/api/vd/upload', formData, {
+        const uploadResponse = await axios.post('http://196.252.197.151:8000/api/vd/upload', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },

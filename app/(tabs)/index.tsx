@@ -13,7 +13,8 @@ import SettingsScreen from '../screens/SettingScreen';
 import HelpScreen from '../screens/HelpScreen';
 import ContactUsScreen from '../screens/ContactUsScreen';
 import LogoutScreen from '../screens/LogoutScreen';
-
+import LoginScreen from '../screens/LoginScreen'
+import AuthChoiceScreen from "../screens/AuthChoiceScreen";
 // Defining screen names
 type RootStackParamList = {
   Home: undefined;
@@ -40,7 +41,9 @@ const buttons = [
 export default function App() {
   return (
     <NavigationContainer independent={true}>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator initialRouteName="AuthChoice">
+        <Stack.Screen name="AuthChoice" component={AuthChoiceScreen} />
+        <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Assignments" component={AssignmentsScreen} />
         <Stack.Screen name="AssignmentsDetails" component={AssignmentDetailScreen} />
